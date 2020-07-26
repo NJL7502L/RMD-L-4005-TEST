@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <../lib/FlexCAN_Library/FlexCAN.h>
+#include <../lib/FlexCAN_T4/FlexCAN_T4.h>
 #include <MsTimer2.h>
 
 const uint16_t RMD_ID = 0x140 + 1;
@@ -8,10 +8,10 @@ const uint8_t CONTROL_COMMAND[23] = {
     0x90,0x91,0x19,0x92,0x94,
     0x9A,0x9B,0x9C,0x9D,
     0x80,0x81,0x88,
-    0xA1,0xA2,0xA3,0xA4,0xA5,0xA6
+    0xA1,0xA2,0xA3,0xA4,0xA5,0xA
 };
 
-FlexCAN CANbus(1000000);
+FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> CANbus;
 CAN_message_t msg;
 
 uint16_t rawEncVal[2];
@@ -60,6 +60,7 @@ void setup() {
 
   Serial.begin(115200);
   CANbus.begin();
+  CANbus.setBaudRate(1000000);
   
   MsTimer2::set(1, timerInt); //[ms]//0.5msごとでも良さそう。
   MsTimer2::start();
